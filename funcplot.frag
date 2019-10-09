@@ -10,8 +10,22 @@ uniform vec2 resolution;
 
 vec4 debug_f(vec2 position, vec4 defautl_color, vec2 location, float f) {
     float size = 0.1;
-    if (position.x > location.x && position.x < (location.x+size) && position.y > location.y && position.y < (location.y+size)  ) {
-        return vec4( 1.0 );
+    float sub_size = 0.1/5.0;
+    if (position.x > location.x && position.x < (location.x+size/2.0)
+        && position.y > location.y && position.y < (location.y+size) ) {
+
+        if (f >= 1.0) {
+            // print +
+            return vec4( 1.0 );
+        }
+        else if (f <= 0.0) {
+            // print -
+            return vec4( 0.0 );
+        }
+        else {
+            // print f*10
+            return vec4( 0.5 );
+        }
     }
     return defautl_color;
 }
