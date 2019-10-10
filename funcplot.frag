@@ -13,9 +13,40 @@ uniform vec2 resolution;
 #define d_if_pixel( p, l, px ) ((p).x > ((l).x + d_pixel_size*(px).x) && (p).x < ((l).x + d_pixel_size*((px).x + 1.0)) && (p).y > ((l).y + d_pixel_size*(px).y) && (p).y < ((l).y + d_pixel_size*((px).y + 1.0)))
 
 
+vec4 d_draw_rectangle(vec2 position, vec4 defautl_color, vec2 location) {
+    if (d_if_pixel(position, location, vec2(0.0, 0.0))) return d_pixel_color;
+if (d_if_pixel(position, location, vec2(1.0, 0.0))) return d_pixel_color;
+if (d_if_pixel(position, location, vec2(2.0, 0.0))) return d_pixel_color;
+if (d_if_pixel(position, location, vec2(0.0, 1.0))) return d_pixel_color;
+if (d_if_pixel(position, location, vec2(1.0, 1.0))) return d_pixel_color;
+if (d_if_pixel(position, location, vec2(2.0, 1.0))) return d_pixel_color;
+if (d_if_pixel(position, location, vec2(0.0, 2.0))) return d_pixel_color;
+if (d_if_pixel(position, location, vec2(1.0, 2.0))) return d_pixel_color;
+if (d_if_pixel(position, location, vec2(2.0, 2.0))) return d_pixel_color;
+if (d_if_pixel(position, location, vec2(0.0, 3.0))) return d_pixel_color;
+if (d_if_pixel(position, location, vec2(1.0, 3.0))) return d_pixel_color;
+if (d_if_pixel(position, location, vec2(2.0, 3.0))) return d_pixel_color;
+if (d_if_pixel(position, location, vec2(0.0, 4.0))) return d_pixel_color;
+if (d_if_pixel(position, location, vec2(1.0, 4.0))) return d_pixel_color;
+if (d_if_pixel(position, location, vec2(2.0, 4.0))) return d_pixel_color;
+return defautl_color;
+}
+
+
 vec4 d_draw_0(vec2 position, vec4 defautl_color, vec2 location) {
     if (d_if_pixel(position, location, vec2(0.0, 0.0))) return d_pixel_color;
-    return defautl_color;
+if (d_if_pixel(position, location, vec2(1.0, 0.0))) return d_pixel_color;
+if (d_if_pixel(position, location, vec2(2.0, 0.0))) return d_pixel_color;
+if (d_if_pixel(position, location, vec2(0.0, 1.0))) return d_pixel_color;
+if (d_if_pixel(position, location, vec2(2.0, 1.0))) return d_pixel_color;
+if (d_if_pixel(position, location, vec2(0.0, 2.0))) return d_pixel_color;
+if (d_if_pixel(position, location, vec2(2.0, 2.0))) return d_pixel_color;
+if (d_if_pixel(position, location, vec2(0.0, 3.0))) return d_pixel_color;
+if (d_if_pixel(position, location, vec2(2.0, 3.0))) return d_pixel_color;
+if (d_if_pixel(position, location, vec2(0.0, 4.0))) return d_pixel_color;
+if (d_if_pixel(position, location, vec2(1.0, 4.0))) return d_pixel_color;
+if (d_if_pixel(position, location, vec2(2.0, 4.0))) return d_pixel_color;
+return defautl_color;
 }
 
 vec4 debug_f(vec2 position, vec4 defautl_color, vec2 location, float f) {
@@ -50,6 +81,8 @@ void main( void ) {
 
     vec4 color = vec4( func_plot(position.x*10.0, position.y*10.0), 0.0, 0.0, 1.0 );
 
-    gl_FragColor = d_draw_0(position, color, vec2( 0.5 ));
+    color = d_draw_rectangle(position, color, vec2( 0.1 ));
+    color = d_draw_0(position, color, vec2( 0.5 ));
+    gl_FragColor = color;
 
 }
