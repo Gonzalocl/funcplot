@@ -224,8 +224,18 @@ if (d_if_pixel(position, location, vec2(2.0, 4.0))) return d_pixel_color;
 return defautl_color;
 }
 
-vec4 d_draw_digit(vec4 defautl_color, vec2 location, float d) {
+vec4 d_draw_digit(vec4 defautl_color, vec2 location, int d) {
     vec2 position = ( gl_FragCoord.xy / resolution.xy );
+    if (d == 0) return d_draw_0(defautl_color, location);
+    if (d == 1) return d_draw_1(defautl_color, location);
+    if (d == 2) return d_draw_2(defautl_color, location);
+    if (d == 3) return d_draw_3(defautl_color, location);
+    if (d == 4) return d_draw_4(defautl_color, location);
+    if (d == 5) return d_draw_5(defautl_color, location);
+    if (d == 6) return d_draw_6(defautl_color, location);
+    if (d == 7) return d_draw_7(defautl_color, location);
+    if (d == 8) return d_draw_8(defautl_color, location);
+    if (d == 9) return d_draw_9(defautl_color, location);
     return defautl_color;
 }
 
@@ -245,16 +255,16 @@ void main( void ) {
     vec4 color = vec4( func_plot(position.x*10.0, position.y*10.0), 0.0, 0.0, 1.0 );
 
     color = d_draw_rectangle(color, vec2( 0.5 ));
-    color = d_draw_0(color, vec2( 0.0, 0.0 ));
-    color = d_draw_1(color, vec2( 0.1, 0.0 ));
-    color = d_draw_2(color, vec2( 0.2, 0.0 ));
-    color = d_draw_3(color, vec2( 0.3, 0.0 ));
-    color = d_draw_4(color, vec2( 0.4, 0.0 ));
-    color = d_draw_5(color, vec2( 0.5, 0.0 ));
-    color = d_draw_6(color, vec2( 0.6, 0.0 ));
-    color = d_draw_7(color, vec2( 0.7, 0.0 ));
-    color = d_draw_8(color, vec2( 0.8, 0.0 ));
-    color = d_draw_9(color, vec2( 0.9, 0.0 ));
+    color = d_draw_digit(color, vec2( 0.0, 0.0 ), 0);
+    color = d_draw_digit(color, vec2( 0.1, 0.0 ), 1);
+    color = d_draw_digit(color, vec2( 0.2, 0.0 ), 2);
+    color = d_draw_digit(color, vec2( 0.3, 0.0 ), 3);
+    color = d_draw_digit(color, vec2( 0.4, 0.0 ), 4);
+    color = d_draw_digit(color, vec2( 0.5, 0.0 ), 5);
+    color = d_draw_digit(color, vec2( 0.6, 0.0 ), 6);
+    color = d_draw_digit(color, vec2( 0.7, 0.0 ), 7);
+    color = d_draw_digit(color, vec2( 0.8, 0.0 ), 8);
+    color = d_draw_digit(color, vec2( 0.9, 0.0 ), 9);
     gl_FragColor = color;
 
 }
