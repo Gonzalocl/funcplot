@@ -10,8 +10,8 @@ uniform vec2 resolution;
 
 #define d_pixel_size 0.01
 #define d_pixel_color vec4(1.0)
-#define d_max_frac 8
-#define d_max_digits 8
+#define d_max_frac 4
+#define d_max_digits 4
 #define d_if_pixel( p, l, px ) ((p).x > ((l).x + d_pixel_size*(px).x) && (p).x < ((l).x + d_pixel_size*((px).x + 1.0)) && (p).y > ((l).y + d_pixel_size*(px).y) && (p).y < ((l).y + d_pixel_size*((px).y + 1.0)))
 
 
@@ -250,9 +250,9 @@ vec4 d_draw_int(vec4 defautl_color, vec2 location, int i) {
     // TODO check negative
     // TODO check max digits
     // TODO check defautl first in all fuctions
-    for (int j = d_max_digits; j >= 0; j--) {
+    for (int j = 0; j < d_max_digits; j++) {
         int digit = int( mod( float(i) / ( pow( 10.0, float(j) ) ), 10.0 ) );
-        float digit_position = float(d_max_digits - j);
+        float digit_position = float(d_max_digits - j - 1);
         // TODO y check comon factor
         if (position.y > location.y && position.y < (location.y + d_pixel_size*5.0)
              && position.x > (location.x + digit_position*d_pixel_size*4.0)
