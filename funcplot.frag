@@ -12,6 +12,11 @@ uniform vec2 resolution;
 #define d_pixel_color vec4(1.0)
 #define d_max_frac 4
 #define d_max_digits 4
+#define d_digit_width 4
+#define d_digit_height 6
+#define d_int_width d_digit_width*(d_max_digits + 1)
+#define d_int_height d_digit_height
+
 #define d_if_pixel( p, l, px ) ((p).x > ((l).x + d_pixel_size*(px).x) && (p).x < ((l).x + d_pixel_size*((px).x + 1.0)) && (p).y > ((l).y + d_pixel_size*(px).y) && (p).y < ((l).y + d_pixel_size*((px).y + 1.0)))
 
 
@@ -259,31 +264,51 @@ vec4 d_draw_int(vec4 defautl_color, vec2 location, int i) {
     // check negative
     if (i < 0) {
         i = -i;
-        if (position.y > location.y && position.y < (location.y + d_pixel_size*5.0)
+        if (position.y > location.y && position.y < (location.y + d_pixel_size*float(d_digit_height))
         && position.x > location.x
-        && position.x < (location.x + d_pixel_size*4.0)) {
+        && position.x < (location.x + d_pixel_size*float(d_digit_width))) {
             return d_draw_hyphen(defautl_color, location);
         }
     }
-    location.x += d_pixel_size*4.0;
+    location.x += d_pixel_size*float(d_digit_width);
     // TODO check max digits
     // TODO check defautl first in all fuctions
     for (int j = 0; j < d_max_digits; j++) {
         int digit = int( mod( float(i) / ( pow( 10.0, float(j) ) ), 10.0 ) );
         float digit_position = float(d_max_digits - j - 1);
         // TODO y check comon factor
-        if (position.y > location.y && position.y < (location.y + d_pixel_size*5.0)
-                && position.x > (location.x + digit_position*d_pixel_size*4.0)
-                && position.x < (location.x + (digit_position+1.0)*d_pixel_size*4.0)) {
-            return d_draw_digit(defautl_color, vec2(location.x + (digit_position*d_pixel_size*4.0), location.y), digit);
+        if (position.y > location.y && position.y < (location.y + d_pixel_size*float(d_digit_height))
+                && position.x > (location.x + digit_position*d_pixel_size*float(d_digit_width))
+                && position.x < (location.x + (digit_position+1.0)*d_pixel_size*float(d_digit_width))) {
+            return d_draw_digit(defautl_color, vec2(location.x + (digit_position*d_pixel_size*float(d_digit_width)), location.y), digit);
         }
     }
     return defautl_color;
 }
 
 vec4 d_draw_float(vec4 defautl_color, vec2 location, float f) {
+    // TODO solve gap too large
     vec2 position = ( gl_FragCoord.xy / resolution.xy );
-    // Draw  decimal part
+    // Draw integer part
+    if (position.y > location.y && position.y < (location.y + d_pixel_size*float(d_int_height))
+    && position.x > location.x
+    && position.x < (location.x + d_pixel_size*float(d_int_width))) {
+        return d_draw_int(defautl_color, location, int(f));
+    }
+    location.x += d_pixel_size*float(d_int_width);
+    // Draw dot
+    if (position.y > location.y && position.y < (location.y + d_pixel_size*float(d_digit_height))
+    && position.x > location.x
+    && position.x < (location.x + d_pixel_size*float(d_digit_width))) {
+        return d_draw_dot(defautl_color, location);
+    }
+    location.x += d_pixel_size*float(d_digit_width);
+    // Draw decimal part
+    if (position.y > location.y && position.y < (location.y + d_pixel_size*float(d_int_height))
+    && position.x > location.x
+    && position.x < (location.x + d_pixel_size*float(d_int_width))) {
+        return d_draw_int(defautl_color, location, int(mod(f*pow(10.0, float(d_max_digits)),pow(10.0, float(d_max_digits)))));
+    }
     return defautl_color;
 }
 
@@ -297,7 +322,8 @@ void main( void ) {
 
     vec4 color = vec4( func_plot(position.x*10.0, position.y*10.0), 0.0, 0.0, 1.0 );
 
-    color = d_draw_int(color, vec2(0.0), 654321);
+    color = d_draw_int(color, vec2(0.0), 9999);
+    color = d_draw_float(color, vec2(0.5, 0.0), 31.46);
     gl_FragColor = color;
 
 }
