@@ -229,6 +229,15 @@ vec4 d_draw_dot(vec4 defautl_color, vec2 location) {
     if (d_if_pixel(position, location, vec2(0.0, 0.0))) return d_pixel_color;
 return defautl_color;
 }
+vec4 d_draw_hyphen(vec4 defautl_color, vec2 location) {
+    vec2 position = ( gl_FragCoord.xy / resolution.xy );
+
+if (d_if_pixel(position, location, vec2(0.0, 2.0))) return d_pixel_color;
+if (d_if_pixel(position, location, vec2(1.0, 2.0))) return d_pixel_color;
+if (d_if_pixel(position, location, vec2(2.0, 2.0))) return d_pixel_color;
+
+return defautl_color;
+}
 
 vec4 d_draw_digit(vec4 defautl_color, vec2 location, int d) {
     vec2 position = ( gl_FragCoord.xy / resolution.xy );
@@ -247,7 +256,16 @@ vec4 d_draw_digit(vec4 defautl_color, vec2 location, int d) {
 
 vec4 d_draw_int(vec4 defautl_color, vec2 location, int i) {
     vec2 position = ( gl_FragCoord.xy / resolution.xy );
-    // TODO check negative
+    // check negative
+    if (i < 0) {
+        i = -i;
+        if (position.y > location.y && position.y < (location.y + d_pixel_size*5.0)
+        && position.x > location.x
+        && position.x < (location.x + d_pixel_size*4.0)) {
+            return d_draw_hyphen(defautl_color, location);
+        }
+    }
+    location.x += d_pixel_size*4.0;
     // TODO check max digits
     // TODO check defautl first in all fuctions
     for (int j = 0; j < d_max_digits; j++) {
@@ -255,12 +273,11 @@ vec4 d_draw_int(vec4 defautl_color, vec2 location, int i) {
         float digit_position = float(d_max_digits - j - 1);
         // TODO y check comon factor
         if (position.y > location.y && position.y < (location.y + d_pixel_size*5.0)
-             && position.x > (location.x + digit_position*d_pixel_size*4.0)
-             && position.x < (location.x + (digit_position+1.0)*d_pixel_size*4.0)) {
+                && position.x > (location.x + digit_position*d_pixel_size*4.0)
+                && position.x < (location.x + (digit_position+1.0)*d_pixel_size*4.0)) {
             return d_draw_digit(defautl_color, vec2(location.x + (digit_position*d_pixel_size*4.0), location.y), digit);
         }
     }
-//    return d_draw_digit(defautl_color, location, l);
     return defautl_color;
 }
 
