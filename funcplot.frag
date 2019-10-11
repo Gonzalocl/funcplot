@@ -11,6 +11,7 @@ uniform vec2 resolution;
 #define d_pixel_size 0.01
 #define d_pixel_color vec4(1.0)
 #define d_max_frac 8
+#define d_max_digits 8
 #define d_if_pixel( p, l, px ) ((p).x > ((l).x + d_pixel_size*(px).x) && (p).x < ((l).x + d_pixel_size*((px).x + 1.0)) && (p).y > ((l).y + d_pixel_size*(px).y) && (p).y < ((l).y + d_pixel_size*((px).y + 1.0)))
 
 
@@ -223,6 +224,11 @@ if (d_if_pixel(position, location, vec2(1.0, 4.0))) return d_pixel_color;
 if (d_if_pixel(position, location, vec2(2.0, 4.0))) return d_pixel_color;
 return defautl_color;
 }
+vec4 d_draw_dot(vec4 defautl_color, vec2 location) {
+    vec2 position = ( gl_FragCoord.xy / resolution.xy );
+    if (d_if_pixel(position, location, vec2(0.0, 0.0))) return d_pixel_color;
+return defautl_color;
+}
 
 vec4 d_draw_digit(vec4 defautl_color, vec2 location, int d) {
     vec2 position = ( gl_FragCoord.xy / resolution.xy );
@@ -239,8 +245,27 @@ vec4 d_draw_digit(vec4 defautl_color, vec2 location, int d) {
     return defautl_color;
 }
 
+vec4 d_draw_int(vec4 defautl_color, vec2 location, int i) {
+    // TODO check negative
+    // TODO check max digits
+    // TODO check defautl first in all fuctions
+    int l = 1;
+    for (int j = 0; j < d_max_digits; j++) {
+        // TODO check this
+        if (( float(i) /( pow(10.0, float(l) ) )) > 1.0) {
+            l++;
+        }
+        else {
+            break;
+        }
+    }
+    return d_draw_digit(defautl_color, location, l);
+    return defautl_color;
+}
+
 vec4 d_draw_float(vec4 defautl_color, vec2 location, float f) {
     vec2 position = ( gl_FragCoord.xy / resolution.xy );
+    // Draw  decimal part
     return defautl_color;
 }
 
@@ -265,6 +290,7 @@ void main( void ) {
     color = d_draw_digit(color, vec2( 0.7, 0.0 ), 7);
     color = d_draw_digit(color, vec2( 0.8, 0.0 ), 8);
     color = d_draw_digit(color, vec2( 0.9, 0.0 ), 9);
+    color = d_draw_int(color, vec2(0.6), 27);
     gl_FragColor = color;
 
 }
