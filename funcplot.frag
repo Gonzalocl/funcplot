@@ -318,12 +318,20 @@ float func_plot(float x, float y) {
 
 void main( void ) {
 
+
+    // TODO change this in all functions user coords insted of position
     vec2 position = ( gl_FragCoord.xy / resolution.xy );
 
     vec4 color = vec4( func_plot(position.x*10.0, position.y*10.0), 0.0, 0.0, 1.0 );
 
-    color = d_draw_int(color, vec2(0.0), 9999);
-    color = d_draw_float(color, vec2(0.5, 0.0), 31.46);
+    color = d_draw_float(color, vec2(0.0, 0.0), mouse.x);
+    color = d_draw_float(color, vec2(0.5, 0.0), mouse.y);
+    color = d_draw_float(color, vec2(0.0, 0.2), resolution.x);
+    color = d_draw_float(color, vec2(0.5, 0.2), resolution.y);
+
+    if (gl_FragCoord.x == 0.5) color = vec4(0.0, 1.0, 0.0, 1.0);
+    if (gl_FragCoord.y == 2.5) color = vec4(0.0, 0.0, 1.0, 1.0);
+
     gl_FragColor = color;
 
 }
