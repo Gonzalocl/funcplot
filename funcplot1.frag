@@ -29,7 +29,7 @@ void main( void ) {
 
     vec2 position = ( gl_FragCoord.xy / resolution.xy );
 
-    vec4 color = vec4( (func_plot((position.x-0.5)*x_range, (position.y-0.5)*y_range)-z_min)/z_range, 0.0, 0.0, 1.0 );
+    vec4 color = vec4( (func_plot((position.x-mouse.x)*x_range, (position.y-mouse.y)*y_range)-z_min)/z_range, 0.0, 0.0, 1.0 );
 
     gl_FragColor = color;
 
