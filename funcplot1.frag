@@ -1,3 +1,5 @@
+//Gonzalo Caparros Laiz
+
 #ifdef GL_ES
 precision mediump float;
 #endif
